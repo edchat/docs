@@ -4,26 +4,16 @@
 dojox.editor.plugins.BidiSupport
 ================================
 
-:Author: Semion Chichelnitsky
+:Author: Semion Chichelnitsky, Ed Chatelain
 :since: V1.10
 
 .. contents ::
     :depth: 2
 
-This plugin provides advanced bidirectional (bidi) support for rich text editing widget. It adds several bidi-specific commands, 
+This plugin provides advanced bidirectional (bidi) support for the rich text editing widget. It adds several bidi-specific commands,
 which are not released in native RTE's ('set text direction to left-to-right', 'set text direction to right-to-left', 
 'change text direction to opposite'). Commands are executed for selected block-level elements by changing their styles. 
 
-Important properties
-====================
-command     
-			Possible values: "bidisupport" and "bidiSupport". Can be used instead of the plugin's name to add plugin to the Editor;
-blockMode   
-			Possible values: "DIV" (which is the default) and "P". Decides behavior of the ENTER key (by other words, decides, 
-			what the new HTML element should be created after user clicked the ENTER key). 
-			This property overrides blockNodeForEnter property of the EnterKeyHandling plugin, if it is loaded.
-sortcutonly   
-			Posiible values: "false" (which is the default) and "true". If it is set to "true", LTR and RTL buttons don't appear.
 
 User Interface
 ==============
@@ -32,7 +22,7 @@ User activates commands,provided by this plugin, using additional left-to-right 
 
 .. image :: BidiButtons.png
 
-or/and using the following shotcuts:
+or/and using the following shortcuts:
  
 - Ctrl + 0    Set RTL text direction
 - Ctrl + 8    Set LTR text direction
@@ -41,65 +31,153 @@ or/and using the following shotcuts:
 Usage
 =====
 
-.. code-example ::
 
+Basic Usage
+-----------
 First include the CSS for it.
 
-    .. css ::
+.. css ::
 
     @import "dojox/editor/plugins/resources/css/BidiSupport.css";
 
-Then require it into the page where you're using the editor.
+Then require the editor and plugin into the page. For example:
 
-    .. js ::
- 
-    require([
-        "dijit/Editor",
-        "dojox/editor/plugins/BidiSupport"
-        ]);
+.. js ::
 
-Now include it in the list of extraPlugins (or in the list of plugins if you're reorganizing the toolbar) for you want to load into the editor, for example:
 
-    .. html ::
+     require([
+              "dijit/Editor",
+              "dojox/editor/plugins/BidiSupport"
+            ]);
 
-    <div data-dojo-type="dijit/Editor" id="editor" data-dojo-props="extraPlugins:['bidisupport']"></div>
+Once it has been required in, all you have to do is include it in the list of extraPlugins (or the plugins property if you're reorganizing the toolbar) for you want to load into the editor.  For example:
+
+.. html ::
+
+    <div data-dojo-type="dijit/Editor" id="editor" data-dojo-props="extraPlugins:['bidisupport']">
+        <p>
+            This editor is created from a div with the bidisupport plugin.
+        </p>
+    </div>
+
+And that's it. The editor instance is now enabled with the BidiSupport plugin!
+
+
+Configuring BidiSupport
+-------------------------
+
+The BidiSupport plugin supports two options, "shortcutonly" and "blockMode".
+Note that "bidisupport" and "bidiSupport" can be used instead of the plugin's name to add plugin to the Editor.
+
++-----------------------------------+---------------------------------------------------------------------+------------------------+
+| **option**                        | **Description**                                                     | **Required**           |
++-----------------------------------+---------------------------------------------------------------------+------------------------+
+| shortcutonly                      |Possible values: "false" (which is the default) and "true". If it is | No                     |
+|                                   |set to "true", LTR and RTL buttons don't appear.                     |                        |
++-----------------------------------+---------------------------------------------------------------------+------------------------+
+| blockMode                         |Possible values: "DIV" (which is the default) and "P". Decides       | No                     |
+|                                   |behavior of the ENTER key (by other words, decides, what the new     |                        |
+|                                   |HTML element should be created after user clicked the ENTER key).    |                        |
+|                                   |This property overrides blockNodeForEnter property of the            |                        |
+|                                   |EnterKeyHandling plugin, if it is loaded.                            |                        |
++-----------------------------------+---------------------------------------------------------------------+------------------------+
+
 
 Examples
 ========
 
+Basic Example
+---------------------------------
+
 .. code-example ::
+  :djConfig: parseOnLoad: true
+  :version: 1.10
 
-Adding Bidi plugin using command.
-    
-    .. html ::
+  .. js ::
 
-    <div data-dojo-type="dijit/Editor" 
+      require([
+              "dijit/Editor",
+              "dojox/editor/plugins/BidiSupport"
+              ]);
+
+  .. css ::
+
+       @import "dojox/editor/plugins/resources/css/BidiSupport.css";
+
+  .. html ::
+
+    <!--Adding BidiSupport plugin.-->
+    <div data-dojo-type="dijit/Editor"
       data-dojo-props='plugins: ["bold","italic","|","justifyLeft","justifyCenter","justifyRight","|","formatBlock"], 
       extraPlugins: ["|","insertOrderedList","insertUnorderedList","|","indent","outdent","|","bidiSupport","|",
       "dijit/_editor/plugins/ViewSource"], height: "230px", disableSpellCheck:true'>		
+        <p>
+            This editor is created from a div with the BidiSupport plugin.
+        </p>
     </div>
 
-Adding Bidi plugin without buttons.
+Example adding BidiSupport plugin without buttons
+-------------------------------------------------
 
-    .. html ::
+.. code-example ::
+  :djConfig: parseOnLoad: true
+  :version: 1.10
 
-    <div data-dojo-type="dijit/Editor" 
+  .. js ::
+
+      require([
+              "dijit/Editor",
+              "dojox/editor/plugins/BidiSupport"
+              ]);
+
+  .. css ::
+
+       @import "dojox/editor/plugins/resources/css/BidiSupport.css";
+
+
+  .. html ::
+
+    <!--Adding BidiSupport plugin without buttons.-->
+    <div data-dojo-type="dijit/Editor"
       data-dojo-props='plugins: ["bold","italic","|","justifyLeft","justifyCenter","justifyRight","|","formatBlock"], 
       extraPlugins: ["|","insertOrderedList","insertUnorderedList","|","indent","outdent","|",
       {name: "dojox/editor/plugins/BidiSupport", shortcutonly: true}, 
       "dijit/_editor/plugins/ViewSource", "collapsibletoolbar"], height: "230px", disableSpellCheck:true'>
+        <p>
+            This editor is created from a div with the BidiSupport plugin.
+        </p>
     </div>
 
-Adding Bidi plugin with specified blockMode.
+Example adding BidiSupport plugin with specified blockMode
+----------------------------------------------------------
 
-    .. html ::
+.. code-example ::
+  :djConfig: parseOnLoad: true
+  :version: 1.10
 
+  .. js ::
+
+      require([
+              "dijit/Editor",
+              "dojox/editor/plugins/BidiSupport"
+              ]);
+
+  .. css ::
+
+       @import "dojox/editor/plugins/resources/css/BidiSupport.css";
+
+  .. html ::
+
+    <!--Adding BidiSupport plugin with specified blockMode.-->
     <div data-dojo-type="dijit/Editor"
       data-dojo-props='plugins: ["bold","italic","|","justifyRight","justifyCenter","justifyLeft","|","formatBlock",
       "dijit/_editor/plugins/EnterKeyHandling"], 
       extraPlugins: ["|","insertOrderedList","insertUnorderedList","|","indent","outdent","|",
       {name: "dojox/editor/plugins/BidiSupport", blockMode: "P"}, "|",
       "dijit/_editor/plugins/ViewSource"], height: "230px", disableSpellCheck:true'>
+        <p>
+            This editor is created from a div with the BidiSupport plugin.
+        </p>
     </div>
 	
 See Also
